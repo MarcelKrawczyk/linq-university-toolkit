@@ -75,10 +75,10 @@ public sealed class ZadaniaLinq
     ///     WHERE CzyAktywny = 0
     /// ) THEN 1 ELSE 0 END;
     /// </summary>
-    public IEnumerable<string> Zadanie05_CzyIstniejeNieaktywneZapisanie()
-    {
-        throw Niezaimplementowano(nameof(Zadanie05_CzyIstniejeNieaktywneZapisanie));
-    }
+    public IEnumerable<string> Zadanie05_CzyIstniejeNieaktywneZapisanie() =>
+    [
+        DaneUczelni.Zapisy.Any(s => !s.CzyAktywny) ? "True" : "False"
+    ];
 
     /// <summary>
     /// Zadanie:
@@ -90,10 +90,11 @@ public sealed class ZadaniaLinq
     /// THEN 1 ELSE 0 END
     /// FROM Prowadzacy;
     /// </summary>
-    public IEnumerable<string> Zadanie06_CzyWszyscyProwadzacyMajaKatedre()
-    {
-        throw Niezaimplementowano(nameof(Zadanie06_CzyWszyscyProwadzacyMajaKatedre));
-    }
+    public IEnumerable<string> Zadanie06_CzyWszyscyProwadzacyMajaKatedre() =>
+    [
+        DaneUczelni.Prowadzacy
+            .Any(s => string.IsNullOrEmpty(s.Katedra)) ? "Nie" : "Tak"
+    ];
 
     /// <summary>
     /// Zadanie:
