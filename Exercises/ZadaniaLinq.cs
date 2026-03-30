@@ -40,10 +40,10 @@ public sealed class ZadaniaLinq
     /// FROM Studenci
     /// ORDER BY Nazwisko, Imie;
     /// </summary>
-    public IEnumerable<string> Zadanie03_StudenciPosortowani()
-    {
-        throw Niezaimplementowano(nameof(Zadanie03_StudenciPosortowani));
-    }
+    public IEnumerable<string> Zadanie03_StudenciPosortowani() =>
+        DaneUczelni.Studenci.OrderBy(s => s.Nazwisko)
+            .ThenBy(s => s.Nazwisko)
+            .Select(s => $"{s.Id} {s.Imie} {s.Nazwisko}");
 
     /// <summary>
     /// Zadanie:
@@ -55,10 +55,13 @@ public sealed class ZadaniaLinq
     /// FROM Przedmioty
     /// WHERE Kategoria = 'Analytics';
     /// </summary>
-    public IEnumerable<string> Zadanie04_PierwszyPrzedmiotAnalityczny()
-    {
-        throw Niezaimplementowano(nameof(Zadanie04_PierwszyPrzedmiotAnalityczny));
-    }
+    public IEnumerable<string> Zadanie04_PierwszyPrzedmiotAnalityczny() =>
+    [
+        DaneUczelni.Przedmioty
+            .Where(s => string.Equals(s.Kategoria, "Analytics", StringComparison.OrdinalIgnoreCase))
+            .Select(s => $"{s.Nazwa} {s.DataStartu}")
+            .FirstOrDefault() ?? "Błąd"
+    ];
 
     /// <summary>
     /// Zadanie:
