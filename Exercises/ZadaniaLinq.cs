@@ -14,10 +14,9 @@ public sealed class ZadaniaLinq
     /// FROM Studenci
     /// WHERE Miasto = 'Warsaw';
     /// </summary>
-    public IEnumerable<string> Zadanie01_StudenciZWarszawy()
-    {
-        throw Niezaimplementowano(nameof(Zadanie01_StudenciZWarszawy));
-    }
+    public IEnumerable<string> Zadanie01_StudenciZWarszawy() =>
+        DaneUczelni.Studenci.Where(s => string.Equals(s.Miasto,"Warsaw", StringComparison.OrdinalIgnoreCase))
+            .Select(s => $"{s.NumerIndeksu} {s.Imie} {s.Nazwisko} {s.Miasto}");
 
     /// <summary>
     /// Zadanie:
@@ -28,10 +27,8 @@ public sealed class ZadaniaLinq
     /// SELECT Email
     /// FROM Studenci;
     /// </summary>
-    public IEnumerable<string> Zadanie02_AdresyEmailStudentow()
-    {
-        throw Niezaimplementowano(nameof(Zadanie02_AdresyEmailStudentow));
-    }
+    public IEnumerable<string> Zadanie02_AdresyEmailStudentow() =>
+        DaneUczelni.Studenci.Select(s => s.Email);
 
     /// <summary>
     /// Zadanie:
