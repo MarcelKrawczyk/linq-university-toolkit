@@ -132,10 +132,9 @@ public sealed class ZadaniaLinq
     /// FROM Zapisy
     /// ORDER BY DataZapisu DESC;
     /// </summary>
-    public IEnumerable<string> Zadanie09_TrzyNajnowszeZapisy()
-    {
-        throw Niezaimplementowano(nameof(Zadanie09_TrzyNajnowszeZapisy));
-    }
+    public IEnumerable<string> Zadanie09_TrzyNajnowszeZapisy() =>
+        DaneUczelni.Zapisy.OrderByDescending(s => s.DataZapisu)
+            .Take(3).Select(s => $"{s.DataZapisu} {s.StudentId} {s.PrzedmiotId}");
 
     /// <summary>
     /// Zadanie:
@@ -148,10 +147,10 @@ public sealed class ZadaniaLinq
     /// ORDER BY Nazwa
     /// OFFSET 2 ROWS FETCH NEXT 2 ROWS ONLY;
     /// </summary>
-    public IEnumerable<string> Zadanie10_DrugaStronaPrzedmiotow()
-    {
-        throw Niezaimplementowano(nameof(Zadanie10_DrugaStronaPrzedmiotow));
-    }
+    public IEnumerable<string> Zadanie10_DrugaStronaPrzedmiotow() =>
+        DaneUczelni.Przedmioty.OrderBy(s => s.Nazwa).Skip(2).Take(2)
+            .Select(s => $"{s.Nazwa} {s.Kategoria}");
+    
 
     /// <summary>
     /// Zadanie:
