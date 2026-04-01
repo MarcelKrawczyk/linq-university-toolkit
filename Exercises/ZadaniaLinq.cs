@@ -150,7 +150,7 @@ public sealed class ZadaniaLinq
     public IEnumerable<string> Zadanie10_DrugaStronaPrzedmiotow() =>
         DaneUczelni.Przedmioty.OrderBy(s => s.Nazwa).Skip(2).Take(2)
             .Select(s => $"{s.Nazwa} {s.Kategoria}");
-    
+
 
     /// <summary>
     /// Zadanie:
@@ -162,10 +162,12 @@ public sealed class ZadaniaLinq
     /// FROM Studenci s
     /// JOIN Zapisy z ON s.Id = z.StudentId;
     /// </summary>
-    public IEnumerable<string> Zadanie11_PolaczStudentowIZapisy()
-    {
-        throw Niezaimplementowano(nameof(Zadanie11_PolaczStudentowIZapisy));
-    }
+    public IEnumerable<string> Zadanie11_PolaczStudentowIZapisy() =>
+        DaneUczelni.Studenci.Join(
+            DaneUczelni.Zapisy, 
+            s => s.Id, 
+            z => z.StudentId, 
+            (s, z) => $"{s.Imie} {s.Nazwisko} {z.DataZapisu}");
 
     /// <summary>
     /// Zadanie:
@@ -178,10 +180,18 @@ public sealed class ZadaniaLinq
     /// JOIN Studenci s ON s.Id = z.StudentId
     /// JOIN Przedmioty p ON p.Id = z.PrzedmiotId;
     /// </summary>
-    public IEnumerable<string> Zadanie12_ParyStudentPrzedmiot()
-    {
-        throw Niezaimplementowano(nameof(Zadanie12_ParyStudentPrzedmiot));
-    }
+    public IEnumerable<string> Zadanie12_ParyStudentPrzedmiot() =>
+        DaneUczelni.Zapisy.Join(
+            DaneUczelni.Studenci,
+            z => z.StudentId,
+            s => s.Id,
+            (z, s) => new { Student = s, Zapis = z }
+            ).Join(
+            DaneUczelni.Przedmioty,
+            sz => sz.Zapis.PrzedmiotId,
+            p => p.Id,
+            (sz, p) => $"{sz.Student.Imie} {sz.Student.Nazwisko} {p.Nazwa}"
+            );
 
     /// <summary>
     /// Zadanie:
