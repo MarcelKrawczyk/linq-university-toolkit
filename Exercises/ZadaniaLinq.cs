@@ -105,10 +105,10 @@ public sealed class ZadaniaLinq
     /// FROM Zapisy
     /// WHERE CzyAktywny = 1;
     /// </summary>
-    public IEnumerable<string> Zadanie07_LiczbaAktywnychZapisow()
-    {
-        throw Niezaimplementowano(nameof(Zadanie07_LiczbaAktywnychZapisow));
-    }
+    public IEnumerable<string> Zadanie07_LiczbaAktywnychZapisow() =>
+    [
+        DaneUczelni.Zapisy.Count(s => s.CzyAktywny).ToString()
+    ];
 
     /// <summary>
     /// Zadanie:
@@ -119,10 +119,8 @@ public sealed class ZadaniaLinq
     /// FROM Studenci
     /// ORDER BY Miasto;
     /// </summary>
-    public IEnumerable<string> Zadanie08_UnikalneMiastaStudentow()
-    {
-        throw Niezaimplementowano(nameof(Zadanie08_UnikalneMiastaStudentow));
-    }
+    public IEnumerable<string> Zadanie08_UnikalneMiastaStudentow() =>
+        DaneUczelni.Studenci.Select(s => s.Miasto).Distinct().Order();
 
     /// <summary>
     /// Zadanie:
