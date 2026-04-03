@@ -245,10 +245,17 @@ public sealed class ZadaniaLinq
     /// LEFT JOIN Przedmioty p ON p.ProwadzacyId = pr.Id
     /// GROUP BY pr.Imie, pr.Nazwisko;
     /// </summary>
-    public IEnumerable<string> Zadanie15_ProwadzacyILiczbaPrzedmiotow()
-    {
-        throw Niezaimplementowano(nameof(Zadanie15_ProwadzacyILiczbaPrzedmiotow));
-    }
+    public IEnumerable<string> Zadanie15_ProwadzacyILiczbaPrzedmiotow() =>
+        DaneUczelni.Prowadzacy
+            .GroupJoin(
+                DaneUczelni.Przedmioty,
+                pr => pr.Id,
+                p => p.ProwadzacyId,
+                (pr, przedmioty) => new {
+                    Imie = pr.Imie,
+                    Nazwisko = pr.Nazwisko,
+                    Liczba = przedmioty.Count() })
+            .Select(x => $"{x.Imie} {x.Nazwisko} {x.Liczba}");
 
     /// <summary>
     /// Zadanie:
@@ -262,10 +269,16 @@ public sealed class ZadaniaLinq
     /// WHERE z.OcenaKoncowa IS NOT NULL
     /// GROUP BY s.Imie, s.Nazwisko;
     /// </summary>
-    public IEnumerable<string> Zadanie16_NajwyzszaOcenaKazdegoStudenta()
-    {
-        throw Niezaimplementowano(nameof(Zadanie16_NajwyzszaOcenaKazdegoStudenta));
-    }
+    public IEnumerable<string> Zadanie16_NajwyzszaOcenaKazdegoStudenta() =>
+        DaneUczelni.Studenci
+            .Join(
+                DaneUczelni.Zapisy,
+                s => s.Id,
+                z => z.StudentId,
+                (s, z) => new { s.Imie, s.Nazwisko, z.OcenaKoncowa })
+            .Where(x => x.OcenaKoncowa != null)
+            .GroupBy(x => new { x.Imie, x.Nazwisko })
+            .Select(g => $"{g.Key.Imie} {g.Key.Nazwisko} {g.Max(x => x.OcenaKoncowa)}");
 
     /// <summary>
     /// Wyzwanie:
