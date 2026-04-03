@@ -42,8 +42,8 @@ public sealed class ZadaniaLinq
     /// </summary>
     public IEnumerable<string> Zadanie03_StudenciPosortowani() =>
         DaneUczelni.Studenci.OrderBy(s => s.Nazwisko)
-            .ThenBy(s => s.Nazwisko)
-            .Select(s => $"{s.Id} {s.Imie} {s.Nazwisko}");
+            .ThenBy(s => s.Imie)
+            .Select(s => $"{s.NumerIndeksu} {s.Imie} {s.Nazwisko}");
 
     /// <summary>
     /// Zadanie:
@@ -120,7 +120,7 @@ public sealed class ZadaniaLinq
     /// ORDER BY Miasto;
     /// </summary>
     public IEnumerable<string> Zadanie08_UnikalneMiastaStudentow() =>
-        DaneUczelni.Studenci.Select(s => s.Miasto).Distinct().Order();
+        DaneUczelni.Studenci.Select(s => s.Miasto).Distinct().OrderBy(x => x);
 
     /// <summary>
     /// Zadanie:
