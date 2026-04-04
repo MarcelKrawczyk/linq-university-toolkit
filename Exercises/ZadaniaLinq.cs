@@ -293,10 +293,17 @@ public sealed class ZadaniaLinq
     /// GROUP BY s.Imie, s.Nazwisko
     /// HAVING COUNT(*) > 1;
     /// </summary>
-    public IEnumerable<string> Wyzwanie01_StudenciZWiecejNizJednymAktywnymPrzedmiotem()
-    {
-        throw Niezaimplementowano(nameof(Wyzwanie01_StudenciZWiecejNizJednymAktywnymPrzedmiotem));
-    }
+    public IEnumerable<string> Wyzwanie01_StudenciZWiecejNizJednymAktywnymPrzedmiotem() =>
+        DaneUczelni.Studenci
+            .Join(
+                DaneUczelni.Zapisy,
+                s => s.Id,
+                z => z.StudentId,
+                (s, z) => new { s.Imie, s.Nazwisko, z.CzyAktywny })
+            .Where(x => x.CzyAktywny)
+            .GroupBy(x => new { x.Imie, x.Nazwisko })
+            .Where(g => g.Count() > 1)
+            .Select(g => $"{g.Key.Imie} {g.Key.Nazwisko} {g.Count()}");
 
     /// <summary>
     /// Wyzwanie:
@@ -310,10 +317,17 @@ public sealed class ZadaniaLinq
     /// GROUP BY p.Nazwa
     /// HAVING SUM(CASE WHEN z.OcenaKoncowa IS NOT NULL THEN 1 ELSE 0 END) = 0;
     /// </summary>
-    public IEnumerable<string> Wyzwanie02_PrzedmiotyStartujaceWKwietniuBezOcenKoncowych()
-    {
-        throw Niezaimplementowano(nameof(Wyzwanie02_PrzedmiotyStartujaceWKwietniuBezOcenKoncowych));
-    }
+    public IEnumerable<string> Wyzwanie02_PrzedmiotyStartujaceWKwietniuBezOcenKoncowych() =>
+        DaneUczelni.Przedmioty
+            .Where(p => p.DataStartu.Month == 4 && p.DataStartu.Year == 2026)
+            .Join(
+                DaneUczelni.Zapisy,
+                p => p.Id,
+                z => z.PrzedmiotId,
+                (p, z) => new { p.Nazwa, z.OcenaKoncowa })
+            .GroupBy(x => x.Nazwa)
+            .Where(g => !g.Any(x => x.OcenaKoncowa != null))
+            .Select(g => g.Key);
 
     /// <summary>
     /// Wyzwanie:
