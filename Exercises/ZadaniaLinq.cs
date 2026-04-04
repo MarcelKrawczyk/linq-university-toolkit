@@ -342,10 +342,27 @@ public sealed class ZadaniaLinq
     /// WHERE z.OcenaKoncowa IS NOT NULL
     /// GROUP BY pr.Imie, pr.Nazwisko;
     /// </summary>
-    public IEnumerable<string> Wyzwanie03_ProwadzacyISredniaOcenNaIchPrzedmiotach()
-    {
-        throw Niezaimplementowano(nameof(Wyzwanie03_ProwadzacyISredniaOcenNaIchPrzedmiotach));
-    }
+    public IEnumerable<string> Wyzwanie03_ProwadzacyISredniaOcenNaIchPrzedmiotach() =>
+        DaneUczelni.Prowadzacy
+            .GroupJoin(
+                DaneUczelni.Przedmioty,
+                pr => pr.Id,
+                p => p.ProwadzacyId,
+                (pr, przedmioty) => new { pr, przedmioty })
+            .SelectMany(
+                x => x.przedmioty.DefaultIfEmpty(),
+                (x, p) => new { x.pr, Przedmiot = p })
+            .GroupJoin(
+                DaneUczelni.Zapisy,
+                x => x.Przedmiot?.Id,
+                z => z.PrzedmiotId,
+                (x, zapisy) => new { x.pr, zapisy })
+            .SelectMany(
+                x => x.zapisy.DefaultIfEmpty(),
+                (x, z) => new { x.pr, Ocena = z?.OcenaKoncowa })
+            .Where(x => x.Ocena != null)
+            .GroupBy(x => new { x.pr.Imie, x.pr.Nazwisko })
+            .Select(g => $"{g.Key.Imie} {g.Key.Nazwisko} {g.Average(x => x.Ocena)}");
 
     /// <summary>
     /// Wyzwanie:
@@ -360,10 +377,17 @@ public sealed class ZadaniaLinq
     /// GROUP BY s.Miasto
     /// ORDER BY COUNT(*) DESC;
     /// </summary>
-    public IEnumerable<string> Wyzwanie04_MiastaILiczbaAktywnychZapisow()
-    {
-        throw Niezaimplementowano(nameof(Wyzwanie04_MiastaILiczbaAktywnychZapisow));
-    }
+    public IEnumerable<string> Wyzwanie04_MiastaILiczbaAktywnychZapisow() =>
+        DaneUczelni.Studenci
+            .Join(
+                DaneUczelni.Zapisy,
+                s => s.Id,
+                z => z.StudentId,
+                (s, z) => new { s.Miasto, z.CzyAktywny })
+            .Where(x => x.CzyAktywny)
+            .GroupBy(x => x.Miasto)
+            .OrderByDescending(g => g.Count())
+            .Select(g => $"{g.Key} {g.Count()}");
 
     private static NotImplementedException Niezaimplementowano(string nazwaMetody)
     {
